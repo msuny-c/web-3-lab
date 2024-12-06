@@ -30,6 +30,7 @@ public class AttemptManagedBean implements Serializable {
         attempt.setX(Double.valueOf(params.get("x")));
         attempt.setY(Double.valueOf(params.get("y")));
         attempt.setR(Double.valueOf(params.get("r")));
+        attempt.setType(params.get("type"));
         save(attempt);
     }
 }

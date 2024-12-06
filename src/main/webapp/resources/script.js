@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	setHelpPointListener();
 });
 
-function saveAttemptValues(x, y, r) {
-	saveAttempt([{ name: 'x', value: x }, { name: 'y', value: y }, { name: 'r', value: r }]);
+function saveAttemptValues(x, y, r, type) {
+	saveAttempt([{ name: 'x', value: x }, { name: 'y', value: y }, { name: 'r', value: r }, {name: 'type', value: type}]);
 }
 
 function setScrollShadow(selector, shadow, px) {
@@ -30,6 +30,7 @@ function processForm() {
 
 function processRadius() {
 	let r = getFormValues().r;
+	redraw();
 	updateRadius(r);
 }
 
@@ -37,7 +38,8 @@ function getFormValues() {
 	let x = document.getElementById('form:x');
 	let y = document.getElementById('form:y_input');
 	let r = document.getElementById('form:r_input');
-	return {x: x.value, y: y.value, r: r.value};
+	let type = document.getElementById('form:Ttype_input');
+	return {x: x.value, y: y.value, r: r.value != 0 ? r.value : 0.1, type: type.value};
 }
 
 function isValidForm() {
@@ -124,8 +126,29 @@ function setHelpPointListener() {
 		if (!validateParameters(x, y, r)) return;
 		document.querySelector(".error-messages").classList.add('none');
 		updateRadius(r);
-		saveAttemptValues(x, y, r);
+		saveAttemptValues(x, y, r, coordinates.type);
 	});
+}
+
+function redrawPoints(data) {
+	let points = document.querySelector('svg').querySelectorAll('circle');
+	for (let point of points) {
+		if (point.id != 'help-point') {
+			point.remove();
+		}
+	}
+	for (let attempt of data) {
+		drawPoint(attempt.x, attempt.y, getFormValues().r, attempt.success);
+	}
+}
+
+function updateDatesToTimezone() {
+	const dateElements = document.querySelectorAll('.date-column');
+    dateElements.forEach((element) => {
+		const utcDate = element.innerHTML.trim();
+		const localDate = new Date(utcDate);
+		element.innerHTML = localDate.toLocaleString();
+    });
 }
 
 function drawPointAfter() {
@@ -134,7 +157,7 @@ function drawPointAfter() {
 	let x = cells[1].innerHTML;
 	let y = cells[2].innerHTML;
 	let r = cells[3].innerHTML;
-	let success = cells[4].querySelector('span');
+	let success = cells[5].querySelector('span');
 	drawPoint(x, y, r, success.innerHTML == 'попадание' ? 'true' : 'false');
 }
 

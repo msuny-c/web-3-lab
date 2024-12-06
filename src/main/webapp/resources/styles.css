@@ -273,3 +273,13 @@ body .ui-widget {
 	padding-bottom: 10px;
 	width: 100%;
 }
+
+body .ui-selectonemenu {
+	border-radius: 0px;
+	border: none;
+	margin-top: 20px;
+}
+
+body .ui-selectonemenu .ui-selectonemenu-label {
+	color: #2c4942;
+}

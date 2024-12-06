@@ -28,4 +28,6 @@ public @Data class AttemptBackingBean implements Serializable {
     @Max(value = 3)
     @ManagedProperty("#{param.r}")
     private double r;
+    @ManagedProperty("#{param.type}")
+    private String type;
 }
